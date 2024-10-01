@@ -1,4 +1,4 @@
-# unplugin-isolated-decl-nested-wrong-path
+# unplugin-isolated-decl-using-ts-plugin
 
 ```shell
 npm i
@@ -10,33 +10,28 @@ npm run build
 
 Check content inside `dist` folder:
 
-> [!WARNING]
-> `dist/a/ComponentA/ComponentA/index.d.ts` file imports `MyModel` from `dist/a/Models/model/index.d.ts` with the wrong reference path:
->
-> In the emitted structure `ComponentA` imports `dist/a/Models/model`
-> referencing it with one `../` so the lookup ends up in `dist/a/ComponentA/` rather than `dist/a`. Another pair of `../` is required to correctly resolve the requested file.
->
-
-> [!NOTE]
->
-> - I'm using `preserveModules` as output option
+Using `@rollup/plugin-typescript` the declaration files are located
+in the original position relative to the source folder (src)
 
 ```text
 dist
 dist/a
 dist/a/index.js
 dist/a/Models
-dist/a/Models/model
-dist/a/Models/model/index.d.ts
+dist/a/Models/model.d.ts
 dist/a/ComponentA
 dist/a/ComponentA/ComponentA
 dist/a/ComponentA/ComponentA/index.js
-dist/a/ComponentA/ComponentA/index.d.ts 
-                             ^ this file contains the invalid path to the Models file
+dist/a/ComponentA/ComponentA.d.ts <---
 dist/a/index.d.ts
 
 dist/b
-not relevant for this bug
+dist/b/ComponentB
+dist/b/ComponentB/ComponentB
+dist/b/ComponentB/ComponentB/index.js
+dist/b/ComponentB/ComponentB.d.ts <---
+dist/b/index.js
+dist/b/index.d.ts
 ```
 
 [Github issue](https://github.com/unplugin/unplugin-isolated-decl/issues/23)

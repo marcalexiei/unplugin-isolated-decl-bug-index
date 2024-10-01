@@ -1,6 +1,7 @@
 import { defineConfig } from "rollup";
 import UnpluginIsolatedDecl from "unplugin-isolated-decl/rollup";
 import { swc } from "rollup-plugin-swc3";
+import typescript from "@rollup/plugin-typescript";
 
 export default defineConfig({
   input: {
@@ -14,5 +15,6 @@ export default defineConfig({
     preserveModules: true,
   },
   external: ["react"],
-  plugins: [UnpluginIsolatedDecl(), swc()],
+  plugins: [typescript({ declaration: true, outDir: "dist" })],
+  // plugins: [UnpluginIsolatedDecl(), swc()],
 });
