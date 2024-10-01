@@ -1,7 +1,8 @@
 import React from "react";
+import type { MyModel } from "../Models/model";
 
-interface ComponentAProps {
-  test: string;
+export interface ComponentAProps {
+  test: MyModel;
 }
 
 export function ComponentA(props: ComponentAProps): React.JSX.Element {

@@ -1,4 +1,4 @@
-# unplugin-isolated-decl-bug-index
+# unplugin-isolated-decl-nested-wrong-path
 
 ```shell
 npm i
@@ -11,29 +11,32 @@ npm run build
 Check content inside `dist` folder:
 
 > [!WARNING]
-> the `index.d.ts` of the entry points are located inside a `index` folder which break his resolution (All reference inside the file have `./{...}`).
+> `dist/a/ComponentA/ComponentA/index.d.ts` file imports `MyModel` from `dist/a/Models/model/index.d.ts` with the wrong reference path:
+>
+> In the emitted structure `ComponentA` imports `dist/a/Models/model`
+> referencing it with one `../` so the lookup ends up in `dist/a/ComponentA/` rather than `dist/a`. Another pair of `../` is required to correctly resolve the requested file.
+>
 
 > [!NOTE]
 >
-> - JS files are created in the right folders
 > - I'm using `preserveModules` as output option
 
 ```text
+dist
 dist/a
 dist/a/index.js
+dist/a/Models
+dist/a/Models/model
+dist/a/Models/model/index.d.ts
 dist/a/ComponentA
 dist/a/ComponentA/ComponentA
 dist/a/ComponentA/ComponentA/index.js
-dist/a/ComponentA/ComponentA/index.d.ts
-dist/a/index
-dist/a/index/index.d.ts <---- should be dist/a/index.d.ts
+dist/a/ComponentA/ComponentA/index.d.ts 
+                             ^ this file contains the invalid path to the Models file
+dist/a/index.d.ts
 
 dist/b
-dist/b/ComponentB
-dist/b/ComponentB/ComponentB
-dist/b/ComponentB/ComponentB/index.js
-dist/b/ComponentB/ComponentB/index.d.ts
-dist/b/index.js
-dist/b/index
-dist/b/index/index.d.ts <---- should be dist/b/index.d.ts
+not relevant for this bug
 ```
+
+[Github issue](https://github.com/unplugin/unplugin-isolated-decl/issues/23)
